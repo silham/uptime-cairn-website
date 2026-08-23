@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { THEME_STORAGE_KEY } from "./theme-script";
 
 type Theme = "light" | "dark";
 
 /**
- * The source of truth for the theme is the `dark` class on <html>, because
- * that is what the inline head script sets before React exists. This subscribes
- * to that class rather than mirroring it into component state — the two could
+ * The source of truth for the theme is the `dark` class on <html>, because that
+ * is what the inline head script sets before React exists. This subscribes to
+ * that class rather than mirroring it into component state — the two could
  * otherwise disagree, and the one that would be wrong is the one driving the
  * accessible label.
+ *
+ * Nothing here watches prefers-color-scheme. The site is light until someone
+ * presses the button, and stays wherever they put it.
  */
 function subscribe(onChange: () => void) {
   const observer = new MutationObserver(onChange);
@@ -25,30 +28,15 @@ function getSnapshot(): Theme {
   return document.documentElement.classList.contains("dark") ? "dark" : "light";
 }
 
-/* The server has no way to know; React re-reads on the client after hydration. */
+/* Light is the default and the server always renders it, so this is not a
+   guess that React has to correct after hydration — it is the real answer for
+   every first paint. */
 function getServerSnapshot(): Theme {
   return "light";
 }
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-  useEffect(() => {
-    // Follow the OS only while the visitor has not made a choice. Once
-    // uc-theme is set, an OS change must not override it.
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (event: MediaQueryListEvent) => {
-      try {
-        if (localStorage.getItem(THEME_STORAGE_KEY)) return;
-      } catch {
-        return;
-      }
-      document.documentElement.classList.toggle("dark", event.matches);
-    };
-
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
 
   function toggle() {
     const next: Theme = getSnapshot() === "dark" ? "light" : "dark";
