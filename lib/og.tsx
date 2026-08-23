@@ -141,7 +141,7 @@ export function OgCard({
           color: MUTED,
         }}
       >
-        <span>AGPL-3.0</span>
+        <span>Apache 2.0</span>
         <span>·</span>
         <span>self-hosted</span>
         <span>·</span>

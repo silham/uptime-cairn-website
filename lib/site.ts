@@ -31,8 +31,8 @@ export const SITE = {
   dockerHubImage: "webloomlabs/uptime-cairn:latest",
 
   securityEmail: "security@uptimecairn.dev",
-  licence: "AGPL-3.0-or-later",
-  licenceUrl: "https://www.gnu.org/licenses/agpl-3.0.html",
+  licence: "Apache-2.0",
+  licenceUrl: "https://www.apache.org/licenses/LICENSE-2.0",
 
   author: "Webloom Labs",
   authorUrl: "https://webloomlabs.com",

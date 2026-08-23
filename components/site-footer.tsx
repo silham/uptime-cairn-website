@@ -98,7 +98,7 @@ export function SiteFooter() {
             rel="noreferrer"
             className="text-accent-ink underline underline-offset-[3px]"
           >
-            AGPL-3.0
+            Apache 2.0
           </a>
           . Nothing is held back for a paid tier.
         </p>

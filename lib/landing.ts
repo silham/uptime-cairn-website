@@ -29,7 +29,7 @@ export const LANDING = {
     secondary: { label: "Read the quickstart", href: "/docs/quickstart" },
     legendCaption: "Six heartbeat statuses",
     facts: [
-      "AGPL-3.0",
+      "Apache 2.0",
       `v${SITE.version}`,
       "Go 1.25",
       "SQLite",
@@ -189,6 +189,6 @@ export const LANDING = {
     primary: { label: "Read the install guide", href: "/docs/install" },
     secondary: { label: "View source on GitHub", href: SITE.github },
     footnote:
-      "AGPL-3.0, with a contributor licence agreement that explicitly cannot be used to paywall a feature in the open build.",
+      "Apache 2.0, with a contributor licence agreement that explicitly cannot be used to paywall a feature in the open build.",
   },
 } as const;

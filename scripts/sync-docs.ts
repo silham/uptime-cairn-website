@@ -50,9 +50,7 @@ const MARKDOWN: { from: string; to: string }[] = [
 const ASSETS: { from: string; to: string }[] = [
   { from: "docs/api/openapi.yaml", to: "public/openapi.yaml" },
   { from: "screenshots/dashboard.png", to: "public/screenshots/dashboard.png" },
-  // The filename is misspelled upstream. Renamed here rather than there, so
-  // the copy stays a pure read of the product repo.
-  { from: "screenshots/moniter.png", to: "public/screenshots/monitor.png" },
+  { from: "screenshots/monitor.png", to: "public/screenshots/monitor.png" },
   { from: "screenshots/statusPage.png", to: "public/screenshots/status-page.png" },
 ];
 
