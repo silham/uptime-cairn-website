@@ -1,0 +1,39 @@
+name: Documentation drift
+
+# content/docs/ holds byte-identical copies of documentation that lives in the
+# product repository. Copies rot quietly, so this checks weekly rather than
+# waiting for someone to notice the website describing a released behaviour
+# that changed two months ago.
+#
+# Deliberately not part of CI: a stale doc must never block a deploy of an
+# unrelated change.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: website
+      - uses: actions/checkout@v4
+        with:
+          repository: webloomlabs/uptime-cairn
+          path: uptime-cairn
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - run: npm ci
+        working-directory: website
+      - name: Compare against the product repository
+        working-directory: website
+        env:
+          UPTIME_CAIRN_PATH: ${{ github.workspace }}/uptime-cairn
+        run: npm run sync:docs:check

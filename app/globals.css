@@ -1,1 +1,445 @@
 @import "tailwindcss";
+
+/* Tailwind v4 has no config file, so the dark variant is declared here.
+   `:where()` keeps specificity at zero, so a `dark:` utility never outranks a
+   later non-dark utility in the same class list. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Tokens.
+
+   The reference site (wbl-v2) is light-only and spells every surface as a
+   literal `zinc-*` utility — ~200 call sites. Bolting `dark:` onto each of
+   those would double every className and make the ledger grid, which depends
+   on every border being the exact same value, impossible to keep coherent.
+   So the zinc ladder is collapsed into semantic tokens instead and the
+   light/dark decision lives only in this file.
+
+   Every dark value is picked so its contrast against its own ground matches
+   the light value's contrast against white. That is what preserves the
+   zinc-flavoured feel rather than merely inverting it. Ratios are noted where
+   they matter.
+   --------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --ground: #ffffff;      /* page background                          */
+  --surface: #fafafa;     /* was bg-zinc-50   — hover fills           */
+  --surface-2: #f4f4f5;   /* was bg-zinc-100  — pills, inline code    */
+  --line: #e4e4e7;        /* was border-zinc-200 — THE LEDGER RULE    */
+  --line-strong: #d4d4d8; /* was border-zinc-300 — secondary button   */
+
+  --ink: #09090b;         /* 19.90:1  was text-zinc-950 */
+  --ink-body: #52525b;    /*  7.73:1  was text-zinc-600 */
+  --ink-muted: #71717a;   /*  4.83:1  was text-zinc-500 */
+  /* --ink-subtle is the only token that does not clear AA, so it is reserved
+     for decoration that carries no meaning: list bullets, the dash beside a
+     sentence, a hairline glyph. Text always uses --ink-muted or darker. The
+     reference site paints its section numbers at this weight; here they are a
+     step darker, because a number rendered on screen is still text. */
+  --ink-subtle: #8a8a93;  /*  3.42:1  NOT for text — see the note below */
+
+  --solid: #18181b;       /* primary button */
+  --solid-hover: #27272a;
+  --on-solid: #ffffff;
+
+  /* The one dark panel per page. */
+  --panel: #09090b;
+  --panel-edge: transparent;
+  --panel-ink: #ffffff;
+  --panel-body: rgb(255 255 255 / 0.6);
+  --panel-muted: rgb(255 255 255 / 0.45);
+  --panel-faint: rgb(255 255 255 / 0.4); /* decoration only, as --ink-subtle */
+  --panel-line: rgb(255 255 255 / 0.1);
+  --panel-chip: rgb(255 255 255 / 0.1);
+
+  /* --accent is a FILL. It is 1.91:1 on white; it is never text here.
+     Anything that has to be read uses --accent-ink. */
+  --accent: #32d583;
+  --accent-ink: #0b7a4c; /* 5.38:1 on white */
+  --accent-soft: #e9faf1;
+
+  /* Heartbeat statuses, exactly as the product paints them. */
+  --up: #32d583;
+  --down: #f0616d;
+  --pending: #fdb022;
+  --maintenance: #62a8fa;
+  --unknown: #7d879c;
+  --skipped: rgb(125 135 156 / 0.45);
+
+  /* Readable twins for the labels beside those swatches. The product's
+     colours were designed against a dark ground and five of the six fail AA
+     on white, so the raw colour stays a fill and the twin carries the text. */
+  --up-ink: #0b7a4c;         /* 5.38:1 */
+  --down-ink: #c0303c;       /* 5.63:1 */
+  --pending-ink: #8f6100;    /* 5.42:1 */
+  --maintenance-ink: #1b6ad0;/* 5.23:1 */
+  --unknown-ink: #5f6875;    /* 5.64:1 */
+
+  --code-bg: #fafafa;
+  --code-line: #e4e4e7;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --ground: #0d1017;      /* the product's own dark ground */
+  --surface: #161a23;     /* the product's raised surface  */
+  --surface-2: #1c2230;
+  --line: #232936;        /* 1.31:1 — matches zinc-200-on-white's 1.27:1 */
+  --line-strong: #2c3441;
+
+  --ink: #f2f4f8;         /* 17.28:1 */
+  --ink-body: #b9c0cc;    /* 10.40:1 */
+  --ink-muted: #7f8899;   /*  5.33:1 */
+  --ink-subtle: #636c7d;  /*  3.60:1  NOT for text */
+
+  --solid: #f2f4f8;
+  --solid-hover: #d7dce5;
+  --on-solid: #0d1017;
+
+  /* The panel cannot be darker than the ground, so it rises instead — and it
+     needs an edge, which in light mode it does not. */
+  --panel: #161a23;
+  --panel-edge: #262d3a;
+  --panel-ink: #f2f4f8;
+  --panel-body: #b9c0cc;
+  --panel-muted: #8b93a3;
+  --panel-faint: #6d7688;
+  --panel-line: #262d3a;
+  --panel-chip: #232936;
+
+  --accent-ink: #32d583; /* 9.95:1 on the dark ground — the product green itself */
+  --accent-soft: #122a20;
+
+  --up-ink: #32d583;
+  --down-ink: #f0616d;
+  --pending-ink: #fdb022;
+  --maintenance-ink: #62a8fa;
+  --unknown-ink: #9aa3b4;
+
+  --code-bg: #10141c;
+  --code-line: #232936;
+}
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-ink: var(--ink);
+  --color-body: var(--ink-body);
+  --color-muted: var(--ink-muted);
+  --color-subtle: var(--ink-subtle);
+
+  --color-solid: var(--solid);
+  --color-solid-hover: var(--solid-hover);
+  --color-on-solid: var(--on-solid);
+
+  --color-panel: var(--panel);
+  --color-panel-edge: var(--panel-edge);
+  --color-panel-ink: var(--panel-ink);
+  --color-panel-body: var(--panel-body);
+  --color-panel-muted: var(--panel-muted);
+  --color-panel-faint: var(--panel-faint);
+  --color-panel-line: var(--panel-line);
+  --color-panel-chip: var(--panel-chip);
+
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --color-pending: var(--pending);
+  --color-maintenance: var(--maintenance);
+  --color-unknown: var(--unknown);
+  --color-skipped: var(--skipped);
+
+  --color-code-bg: var(--code-bg);
+  --color-code-line: var(--code-line);
+
+  --color-up-ink: var(--up-ink);
+  --color-down-ink: var(--down-ink);
+  --color-pending-ink: var(--pending-ink);
+  --color-maintenance-ink: var(--maintenance-ink);
+  --color-unknown-ink: var(--unknown-ink);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* One visible focus treatment, legible on both grounds. */
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Anchor jumps have to clear the sticky h-18 navbar. */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Code.
+
+   Shiki is run with `defaultColor: false`, so every token carries both themes
+   as inline custom properties and these two rules pick one. No second render,
+   and no flash when the theme toggle flips.
+   --------------------------------------------------------------------------- */
+
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+}
+
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark);
+}
+
+/* Shiki also sets its own background inline. The code block belongs inside the
+   ledger grid rather than floating on a colour of its own, so it is overridden. */
+.shiki {
+  background: transparent !important;
+  font-size: 13.5px;
+  line-height: 1.7;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.shiki code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* ---------------------------------------------------------------------------
+   Rendered documentation.
+
+   Hand-written rather than @tailwindcss/typography, following the reference
+   site's `.wp-content` precedent: the markdown comes from one known corpus, so
+   a plugin's worth of generality is not needed and the tokens stay in play.
+   --------------------------------------------------------------------------- */
+
+.prose-doc {
+  color: var(--ink-body);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+@media (min-width: 768px) {
+  .prose-doc {
+    font-size: 17px;
+  }
+}
+
+.prose-doc > * + * {
+  margin-top: 1.4em;
+}
+
+.prose-doc h2,
+.prose-doc h3,
+.prose-doc h4 {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  scroll-margin-top: 6rem;
+}
+
+.prose-doc h2 {
+  font-size: 1.5em;
+  margin-top: 2.4em;
+  padding-top: 1.6em;
+  border-top: 1px solid var(--line);
+}
+
+.prose-doc h3 {
+  font-size: 1.2em;
+  margin-top: 2em;
+}
+
+.prose-doc h4 {
+  font-size: 1.05em;
+  margin-top: 1.7em;
+}
+
+/* The anchor sits beside the heading and only appears on hover or focus, so it
+   never competes with the heading itself. */
+.prose-doc .heading-anchor {
+  margin-left: 0.4em;
+  color: var(--ink-muted);
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.prose-doc h2:hover .heading-anchor,
+.prose-doc h3:hover .heading-anchor,
+.prose-doc h4:hover .heading-anchor,
+.prose-doc .heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+.prose-doc a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-doc a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.prose-doc strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.prose-doc ul,
+.prose-doc ol {
+  padding-left: 1.4em;
+}
+
+.prose-doc ul {
+  list-style: disc;
+}
+
+.prose-doc ol {
+  list-style: decimal;
+}
+
+.prose-doc li + li {
+  margin-top: 0.5em;
+}
+
+.prose-doc li > ul,
+.prose-doc li > ol {
+  margin-top: 0.5em;
+}
+
+.prose-doc li::marker {
+  color: var(--ink-subtle);
+}
+
+.prose-doc blockquote {
+  border-left: 2px solid var(--line-strong);
+  padding-left: 1.2em;
+  color: var(--ink-muted);
+}
+
+.prose-doc code {
+  background: var(--surface-2);
+  border-radius: 0.25rem;
+  padding: 0.15em 0.4em;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.87em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.prose-doc pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-line);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+}
+
+.prose-doc pre code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+
+.prose-doc hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+/* The corpus puts a `---` before most `##` headings, and the heading already
+   carries its own rule — rendering both stacks two lines with a gap between
+   them. Where they collide the markdown's separator gives way to the heading's,
+   so section spacing stays identical whether or not the author wrote a rule. */
+.prose-doc hr:has(+ h2) {
+  display: none;
+}
+
+/* `display: block` is what stops a wide table widening the whole page. The
+   monitor-types settings table is 2×9 with long cells and will overflow on a
+   phone; it has to scroll inside its own box. */
+.prose-doc table {
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  overflow-x: auto;
+}
+
+.prose-doc th,
+.prose-doc td {
+  border: 1px solid var(--line);
+  padding: 0.6em 0.8em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose-doc th {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prose-doc img {
+  height: auto;
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
+
+/* Outbound links in rendered docs. A great many "read more" links in this
+   corpus land on GitHub rather than on a page here, so the arrow is not
+   decoration — it is the only signal that the next click leaves the site. */
+.prose-doc a[target="_blank"]::after {
+  content: "↗";
+  display: inline-block;
+  margin-left: 0.25em;
+  font-size: 0.85em;
+  text-decoration: none;
+  vertical-align: baseline;
+}

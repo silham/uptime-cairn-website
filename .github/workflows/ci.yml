@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      # The one that matters most. The source markdown is full of
+      # repo-relative links; anything the rewriter cannot place would 404
+      # silently and stay invisible until a reader hit it.
+      - run: npm run links:check
+      - run: npm run build

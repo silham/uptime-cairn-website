@@ -1,0 +1,18 @@
+Files in content/docs/ and the synced assets in public/ are copied
+verbatim from the Uptime Cairn repository by scripts/sync-docs.ts.
+Do not edit them here — edit them there and re-run the sync.
+
+repository: https://github.com/webloomlabs/uptime-cairn
+commit: 47b3cf5662c171636f0211839702ee2e7781050a
+tag: v1.0.1
+
+content/docs/guides/install.md  <-  docs/guides/install.md
+content/docs/guides/quickstart.md  <-  docs/guides/quickstart.md
+content/docs/guides/monitor-types.md  <-  docs/guides/monitor-types.md
+content/docs/guides/alerting.md  <-  docs/guides/alerting.md
+content/docs/guides/migrating-from-uptime-kuma.md  <-  docs/guides/migrating-from-uptime-kuma.md
+content/docs/api/README.md  <-  docs/api/README.md
+public/openapi.yaml  <-  docs/api/openapi.yaml
+public/screenshots/dashboard.png  <-  screenshots/dashboard.png
+public/screenshots/monitor.png  <-  screenshots/moniter.png
+public/screenshots/status-page.png  <-  screenshots/statusPage.png
