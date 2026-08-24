@@ -38,7 +38,7 @@ export const SITE = {
   licenceUrl: "https://www.apache.org/licenses/LICENSE-2.0",
 
   author: "Webloom Labs",
-  authorUrl: "https://webloomlabs.com",
+  authorUrl: "https://www.webloomlabs.net/",
 } as const;
 
 /** A file in the product repo, pinned to the release the docs were synced from. */

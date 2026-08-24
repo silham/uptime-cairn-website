@@ -91,7 +91,10 @@ export function SiteFooter() {
 
       <Container className="flex flex-col gap-3 border-x border-y border-line px-6 py-6 text-[13px] text-muted sm:flex-row sm:items-center sm:justify-between md:px-8">
         <p>
-          &copy; {new Date().getFullYear()} {SITE.author}. Released under{" "}
+          &copy; {new Date().getFullYear()} <a href={SITE.authorUrl} target="_blank" rel="noreferrer" className="text-accent-ink underline underline-offset-[3px]">
+            {SITE.author}
+          </a>
+          . Released under{" "}
           <a
             href={SITE.licenceUrl}
             target="_blank"
