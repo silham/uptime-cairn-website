@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: SITE.url, lastModified, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE.url}/docs`, lastModified, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE.url}/changelog`, lastModified, changeFrequency: "weekly", priority: 0.8 },
     ...DOC_ENTRIES.map((entry) => ({
       url: `${SITE.url}/docs/${entry.slug}`,
       lastModified,

@@ -17,9 +17,12 @@ export const SITE = {
   description:
     "Free, open source, and self-hosted uptime monitoring. One Docker container, one file of data, no database server to set up. Nine monitor types, thirteen alerting channels, public status pages, and a complete REST API.",
 
-  /* Kept in sync with the product repo by scripts/sync-docs.ts. */
+  /* Both rewritten by scripts/sync-docs.ts. `version` is the tag, for display.
+     `repoRef` is the commit the docs were copied from, and is what GitHub
+     fallback links are built against — a tag would 404 on any file added after
+     it was cut. */
   version: "1.0.1",
-  repoRef: "v1.0.1",
+  repoRef: "d99a30f86f078e9d3d10a31da070ac4530c8c0fc",
 
   github: GITHUB,
   issues: `${GITHUB}/issues`,
@@ -53,6 +56,7 @@ export const NAV_LINKS = [
   { label: "Monitor types", href: "/docs/monitor-types" },
   { label: "Alerting", href: "/docs/alerting" },
   { label: "API", href: "/docs/api" },
+  { label: "Changelog", href: "/changelog" },
 ] as const;
 
 export type FooterLink = { label: string; href: string; external?: boolean };
@@ -66,6 +70,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: "Project",
     links: [
+      { label: "Changelog", href: "/changelog" },
       { label: "Source", href: SITE.github, external: true },
       { label: "Releases", href: SITE.releases, external: true },
       { label: "Roadmap", href: githubBlob("ROADMAP.md"), external: true },

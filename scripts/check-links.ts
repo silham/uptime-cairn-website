@@ -24,10 +24,23 @@ async function main() {
   let failures = 0;
   let checked = 0;
 
-  for (const entry of MARKDOWN_ENTRIES) {
-    const markdown = await readFile(path.join(CONTENT_DIR, entry.source!), "utf8");
-    const { unresolved, toc } = await renderMarkdown(markdown, {
+  // The changelog is not in the docs manifest but goes through the same
+  // rewriter, and it is the file most likely to gain new links over time.
+  const targets = [
+    ...MARKDOWN_ENTRIES.map((entry) => ({
+      file: path.join(CONTENT_DIR, entry.source!),
       sourceRepoPath: entry.sourceRepoPath!,
+    })),
+    {
+      file: path.join(process.cwd(), "content", "CHANGELOG.md"),
+      sourceRepoPath: "CHANGELOG.md",
+    },
+  ];
+
+  for (const entry of targets) {
+    const markdown = await readFile(entry.file, "utf8");
+    const { unresolved, toc } = await renderMarkdown(markdown, {
+      sourceRepoPath: entry.sourceRepoPath,
     });
 
     checked += 1;

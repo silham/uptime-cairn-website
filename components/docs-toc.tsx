@@ -12,7 +12,14 @@ import type { TocItem } from "@/lib/markdown";
  * arrive — without it, the active item jumps a section ahead near the end of
  * the page where several headings are on screen at once.
  */
-export function DocsToc({ items }: { items: TocItem[] }) {
+export function DocsToc({
+  items,
+  label = "On this page",
+}: {
+  items: TocItem[];
+  /** The changelog's headings are releases, so it labels the rail "Releases". */
+  label?: string;
+}) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
 
   useEffect(() => {
@@ -41,9 +48,9 @@ export function DocsToc({ items }: { items: TocItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="On this page">
+    <nav aria-label={label}>
       <p className="text-[12px] font-semibold tracking-wide text-muted uppercase">
-        On this page
+        {label}
       </p>
       <ul className="mt-3 flex flex-col">
         {items.map((item) => {

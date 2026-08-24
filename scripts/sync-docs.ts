@@ -44,6 +44,10 @@ const MARKDOWN: { from: string; to: string }[] = [
   // Not routed. Synced so that upstream changes to the API conventions show up
   // in this repo's diff, since /docs/api is hand-written from it.
   { from: "docs/api/README.md", to: "content/docs/api/README.md" },
+
+  // Not a guide and not routed under /docs, so it sits at the content root
+  // rather than in the docs tree. It has its own page at /changelog.
+  { from: "CHANGELOG.md", to: "content/CHANGELOG.md" },
 ];
 
 /** Binary and non-markdown assets. */
@@ -144,28 +148,36 @@ async function main() {
     ].join("\n"),
   );
 
-  await updateVersionConstants(tag);
+  await updateVersionConstants(tag, sha);
 
   console.log(`Synced ${written.length} files from ${SOURCE_REPO} (${tag}, ${shortSha}).`);
 }
 
 /**
- * The release badge in the hero and every GitHub fallback link are built from
- * SITE.version and SITE.repoRef, so they are rewritten here from the product
- * repo's own tag rather than maintained by hand in two places.
+ * The release badge in the hero comes from SITE.version and every GitHub
+ * fallback link from SITE.repoRef, so both are rewritten here from the product
+ * repo rather than maintained by hand in two places.
+ *
+ * They are deliberately different things. `version` is the tag, because that is
+ * what a reader recognises. `repoRef` is the exact commit the content was
+ * copied from, because a tag is only correct until someone adds a file after
+ * it: CHANGELOG.md and docs/why-uptime-cairn.md both landed after v1.0.1, and
+ * linking them at that tag produced 404s on a page that had just been told they
+ * existed. A commit SHA is immutable — so it keeps the property the tag was
+ * chosen for — and it always contains exactly what was synced.
  */
-async function updateVersionConstants(tag: string) {
-  if (!/^v\d+\.\d+\.\d+/.test(tag)) return;
-
+async function updateVersionConstants(tag: string, sha: string) {
   const sitePath = path.join(SITE_ROOT, "lib/site.ts");
   const current = await readFile(sitePath, "utf8");
-  const updated = current
-    .replace(/version: "[^"]*"/, `version: "${tag.replace(/^v/, "")}"`)
-    .replace(/repoRef: "[^"]*"/, `repoRef: "${tag}"`);
+
+  let updated = current.replace(/repoRef: "[^"]*"/, `repoRef: "${sha}"`);
+  if (/^v\d+\.\d+\.\d+/.test(tag)) {
+    updated = updated.replace(/version: "[^"]*"/, `version: "${tag.replace(/^v/, "")}"`);
+  }
 
   if (updated !== current) {
     await writeFile(sitePath, updated);
-    console.log(`Updated lib/site.ts to ${tag}.`);
+    console.log(`Updated lib/site.ts to ${tag} (${sha.slice(0, 7)}).`);
   }
 }
 

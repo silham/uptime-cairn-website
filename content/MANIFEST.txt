@@ -3,7 +3,7 @@ verbatim from the Uptime Cairn repository by scripts/sync-docs.ts.
 Do not edit them here — edit them there and re-run the sync.
 
 repository: https://github.com/webloomlabs/uptime-cairn
-commit: 93be5122ad593db9b71d5486f2db031004ba4162
+commit: d99a30f86f078e9d3d10a31da070ac4530c8c0fc
 tag: v1.0.1
 
 content/docs/guides/install.md  <-  docs/guides/install.md
@@ -12,6 +12,7 @@ content/docs/guides/monitor-types.md  <-  docs/guides/monitor-types.md
 content/docs/guides/alerting.md  <-  docs/guides/alerting.md
 content/docs/guides/migrating-from-uptime-kuma.md  <-  docs/guides/migrating-from-uptime-kuma.md
 content/docs/api/README.md  <-  docs/api/README.md
+content/CHANGELOG.md  <-  CHANGELOG.md
 public/openapi.yaml  <-  docs/api/openapi.yaml
 public/screenshots/dashboard.png  <-  screenshots/dashboard.png
 public/screenshots/monitor.png  <-  screenshots/monitor.png
