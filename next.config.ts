@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   // external stops the bundler from statically walking ~200 grammar files.
   serverExternalPackages: ["shiki"],
 
+  images: {
+    // Blog images are served by Sanity's CDN, which has already resized them
+    // and negotiated the format (`auto=format` in lib/sanity/image.ts). The
+    // <SanityImage> component passes `unoptimized` for that reason; this entry
+    // is here so the images still load if that ever changes.
+    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+  },
+
   async headers() {
     return [
       {

@@ -56,6 +56,7 @@ export const NAV_LINKS = [
   { label: "Monitor types", href: "/docs/monitor-types" },
   { label: "Alerting", href: "/docs/alerting" },
   { label: "API", href: "/docs/api" },
+  { label: "Blog", href: "/blog" },
   { label: "Changelog", href: "/changelog" },
 ] as const;
 
@@ -70,6 +71,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: "Project",
     links: [
+      { label: "Blog", href: "/blog" },
       { label: "Changelog", href: "/changelog" },
       { label: "Source", href: SITE.github, external: true },
       { label: "Releases", href: SITE.releases, external: true },
