@@ -78,6 +78,12 @@ async function main() {
   const sha = git("rev-parse", "HEAD");
   const shortSha = git("rev-parse", "--short", "HEAD");
   const tag = git("describe", "--tags", "--abbrev=0");
+  // The newest tag may be a pre-release. The hero badge sits beside a
+  // `docker run …:latest` command, and the release workflow deliberately does
+  // not move `latest` onto a tag carrying a prerelease suffix — so the badge
+  // has to name the newest *stable* tag or it advertises a version that the
+  // install command on the same page does not give you.
+  const stableTag = git("describe", "--tags", "--abbrev=0", "--exclude=*-*");
 
   const drifted: string[] = [];
   const written: string[] = [];
@@ -148,7 +154,7 @@ async function main() {
     ].join("\n"),
   );
 
-  await updateVersionConstants(tag, sha);
+  await updateVersionConstants(stableTag, sha);
 
   console.log(`Synced ${written.length} files from ${SOURCE_REPO} (${tag}, ${shortSha}).`);
 }
@@ -158,8 +164,8 @@ async function main() {
  * fallback link from SITE.repoRef, so both are rewritten here from the product
  * repo rather than maintained by hand in two places.
  *
- * They are deliberately different things. `version` is the tag, because that is
- * what a reader recognises. `repoRef` is the exact commit the content was
+ * They are deliberately different things. `version` is the newest stable tag,
+ * because that is what `docker pull …:latest` actually resolves to. `repoRef` is the exact commit the content was
  * copied from, because a tag is only correct until someone adds a file after
  * it: CHANGELOG.md and docs/why-uptime-cairn.md both landed after v1.0.1, and
  * linking them at that tag produced 404s on a page that had just been told they

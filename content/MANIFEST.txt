@@ -3,8 +3,8 @@ verbatim from the Uptime Cairn repository by scripts/sync-docs.ts.
 Do not edit them here — edit them there and re-run the sync.
 
 repository: https://github.com/webloomlabs/uptime-cairn
-commit: d99a30f86f078e9d3d10a31da070ac4530c8c0fc
-tag: v1.0.1
+commit: 038545a61305e7410e342cdcf62535513eede000
+tag: v1.1.0-beta.1
 
 content/docs/guides/install.md  <-  docs/guides/install.md
 content/docs/guides/quickstart.md  <-  docs/guides/quickstart.md

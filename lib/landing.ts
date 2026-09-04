@@ -104,7 +104,7 @@ export const LANDING = {
     label: "What it does",
     headline: "Six things,\ndone properly.",
     intro:
-      "Monitoring, alerting, incidents, and status pages. Reporting and team controls are coming, and none of it will be a paid add-on.",
+      "Monitoring, alerting, incidents, and status pages in the stable release, with scheduled reporting now in beta. Team controls are next, and none of it will be a paid add-on.",
   },
 
   monitors: {

@@ -22,7 +22,7 @@ export const SITE = {
      fallback links are built against — a tag would 404 on any file added after
      it was cut. */
   version: "1.0.1",
-  repoRef: "d99a30f86f078e9d3d10a31da070ac4530c8c0fc",
+  repoRef: "038545a61305e7410e342cdcf62535513eede000",
 
   github: GITHUB,
   issues: `${GITHUB}/issues`,

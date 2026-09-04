@@ -2,7 +2,7 @@
  * The /docs/api page.
  *
  * Hand-written rather than rendered from markdown, because the generated
- * reference is 125 operations long and belongs beside the spec rather than on
+ * reference is 140 operations long and belongs beside the spec rather than on
  * a website. What is here is the part a specification cannot state: the rules
  * a client author needs to know before reading any of it.
  *
@@ -21,11 +21,11 @@ export type ApiSection = {
 };
 
 export const API_PAGE = {
-  lead: "Everything the dashboard does, the API does — it was specified before the UI was written, and the dashboard is an ordinary client of it with no privileged channel. This page is the set of rules that apply across all 125 operations. The per-operation reference lives with the spec.",
+  lead: "Everything the dashboard does, the API does — it was specified before the UI was written, and the dashboard is an ordinary client of it with no privileged channel. This page is the set of rules that apply across all 140 operations. The per-operation reference lives with the spec.",
 
   counts: [
-    { value: "125", label: "operations" },
-    { value: "124", label: "schemas" },
+    { value: "140", label: "operations" },
+    { value: "142", label: "schemas" },
     { value: "3.1", label: "OpenAPI version" },
   ],
 
@@ -135,7 +135,7 @@ export const API_PAGE = {
     {
       label: "Full operation reference",
       href: githubBlob("docs/api/reference.md"),
-      description: "Every one of the 125 operations, generated from the spec and kept beside it.",
+      description: "Every one of the 140 operations, generated from the spec and kept beside it.",
       external: true,
     },
     {

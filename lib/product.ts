@@ -168,7 +168,7 @@ export const CAPABILITIES: { number: string; title: string; description: string 
 export const STATS: { value: string; label: string; note: string }[] = [
   { value: "5,000", label: "monitors", note: "load-tested in CI on every change" },
   { value: "250", label: "checks/sec", note: "5,000 monitors at a 20-second interval" },
-  { value: "125", label: "API operations", note: "specified before the UI was written" },
+  { value: "140", label: "API operations", note: "specified before the UI was written" },
   { value: "1", label: "binary", note: "control plane, probe, UI and database" },
 ];
 
